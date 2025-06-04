@@ -1,7 +1,7 @@
 package hello.core.beandefinition;
 
 public class BeanDefinitionTest {
-    NnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
+    AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
 
     @Test
     @DisplayName("빈 설정 메타정보 확인")
