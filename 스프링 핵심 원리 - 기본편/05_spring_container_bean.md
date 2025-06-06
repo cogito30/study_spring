@@ -142,3 +142,5 @@ XxxApplicationContext -> XxxBeanDefinitionReader -> appConfig.xxx -> BeanDefinit
 (정리)
 - BeanDefinition을 직접 생성해서 스프링 컨테이너에 등록할 수도 있음
 - BeanDefinition에 대해서는 스프일이 다양한 형태의 설정 정보를 BeanDefinitino으로 추상화해서 사용하는 것 정도 이해하면 됨
+- java 코드로 입력하는 것은 Factory Method를 통해 제공하는 방식
+- xml은 직접 입력하는 방식
