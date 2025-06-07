@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<!-- 템플릿 엔진 추가 -->
+<html xmln:th="http://www.thymeleaf.org"> 
+<head>
+    <title>Hello Template</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <!-- 템플릿 엔진이 없으면 hello! empty가 보여짐 -->
+    <p th:text="'hello. ' + ${name}">hello! empty</p>
+</body>
+</html>
