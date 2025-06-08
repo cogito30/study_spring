@@ -1,6 +1,18 @@
 # 02. 객체 지향 설계와 스프링
 
 ## 이야기 - 자바 진영의 추운 겨울과 스프링의 탄생
+- EJB(Enterprice Java Beans): 자바 진영의 표준 기술
+- EJB는 어렵고 복잡하고 느리다는 단점이 있음
+- POJO
+- Spring: EJB 컨테이너 대체, 단순함, 현재 사실상 표준 기술
+- Hibernate: EJB 엔티티빈 기술을 대체, JPA 새로운 표준 정의. 
+- JPA: 자바 표준. Hibernate가 구현체라면 JPA는 표준 인터페이스
+
+(Spring 역사)
+- EJB 문제점 지적
+- BeanFactory, ApplicationContext, POJO, IoC, DI
+- XML 기반의 설정에서 자바 코드로 설정되도록 변경
+- 리액티브 프로그래밍 지원
 
 ## 스프링
 (스프링 생태계)
