@@ -1,6 +1,6 @@
 package hello.core.order;
 
-public class OrderServiceImple implements OrderService {
+public class OrderServiceImpl implements OrderService {
 
     private final MemberRepository MemberRepository = new MemoryMemberRepository();
     private final DiscountPolicy discountPolicy = new FixDiscountPolicy();
