@@ -31,7 +31,7 @@ ApplicationContext applicaionContext = new AnnotationConfigApplicationContext(Ap
 ## 스프링 빈 조회 - 기본
 - 스프링 컨테이너에서 스프링 빈 조회 방법: `ac.getBean(빈이름, 타입)`, `ac.getBean(타입)`
 - 조회 대상 스프링 빈이 없으면 예외 발생: `NoSuchBeanDefinitionException: No bean named 'xxxx' available.`
-1) test > java > hello.core.beanfind에서 ApplicationContextContextFindTest(class) 생성
+1) test > java > hello.core.beanfind에서 ApplicationContextBasicFindTest(class) 생성
 - 인터페이스로 조회시 인터페이스의 구현체가 대상이 됨. 스프링 빈에 등록된 인터페이스 타입으로 조회
 - 구체 타입(인터페이스)로 조회시 유연성 떨어짐
 
@@ -106,8 +106,7 @@ XxxApplicationContext(appConfig.xxx)
 ## 스프링 빈 설정 메타 정보 - BeanDefinition
 - 스프링이 다양한 설정 형식을 지원하는데는 `BeanDefinition`이라는 추상화가 있음
 - XML, 자바 코드를 읽어서 `BeanDefinition`을 만듬
-- `BeanDefinition`을 빈 설정 메타정보라고 함. `@Bean`, `<bean
->` 당 하나씩 메타 정보가 생성
+- `BeanDefinition`을 빈 설정 메타정보라고 함. `@Bean`, `<bean>` 당 하나씩 메타 정보가 생성
 - 스프링 컨테이너는 해당 메타정보를 기반으로 스프링 빈을 생성
 
 ```
@@ -116,11 +115,12 @@ XxxApplicationContext(appConfig.xxx)
         AppConfig.class  appConfig.xml  appConfig.xxx
 ```
 
+(코드 레벨로 깊이 접근)
 ```
 ApplicationContext
-AnnotationConfigApplicationContext -> AnnotatedBeanDefinitionReader -> AppConfig.class -> BeanDefinition
-GenericXmlApplicationContextApplicationContext -> XmlBeanDefinitionReader -> appConfig.xml -> BeanDefinition
-XxxApplicationContext -> XxxBeanDefinitionReader -> appConfig.xxx -> BeanDefinition
+|- AnnotationConfigApplicationContext -> AnnotatedBeanDefinitionReader -> AppConfig.class -> BeanDefinition
+|- GenericXmlApplicationContextApplicationContext -> XmlBeanDefinitionReader -> appConfig.xml -> BeanDefinition
+|- XxxApplicationContext -> XxxBeanDefinitionReader -> appConfig.xxx -> BeanDefinition
 ```
 - `AnnotationConfigApplicationContext`는 `AnnotatedBeanDefinitionReader`를 사용해서 `AppConfig.class`를 읽고 `BeanDefinition`을 생성한다
 - `GenericXmlApplicationContext`는 `XmlBeanDefinitionReader`를 사용해서 `appConfig.xml`설정 정보를 읽고 `BeanDefinition`을 생성

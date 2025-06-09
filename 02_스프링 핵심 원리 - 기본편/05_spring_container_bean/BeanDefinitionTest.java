@@ -1,6 +1,7 @@
 package hello.core.beandefinition;
 
 public class BeanDefinitionTest {
+    // ApplicationContext 사용시 getBeanDefinition 불가
     AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
     //GenericXmlApplicationContext ac = new GenericXmlApplicationContext("appConfig.xml");
 
@@ -9,7 +10,7 @@ public class BeanDefinitionTest {
     void findApplicationBean() {
         String[] beanDefinitionNames = ac.getBeanDefinitionNames();
         for (String beanDefinitionName: beanDefinitionNames) {
-            BeanDefinition beanDefinition = ac.getBeanDefinitino(beanDefinitionName);
+            BeanDefinition beanDefinition = ac.getBeanDefinition(beanDefinitionName);
 
             if (beanDefinition.getRole() == BeanDefinition.ROLE_APPLICATION) {
                 System.out.println("beanDefinitionName = " + beanDefinitionName + 
