@@ -2,16 +2,16 @@
 - Java + Jar + SpringBoot + Gradle + IntelliJ
 
 ## 프로젝트 생성
-1) Spring Initializr
+1) [Spring Initializr](https://start.spring.io)로 Spring 프로젝트 생성
 - Project(Gradle), Language(Java), SpringBoot(version)
 - Project MetaData: Group, Artifact, Package Name, Packaginn, Java
 
 2) IntelliJ 열기
 - build.gradle 확인: plugins, group, version, sourceCompatibility, dependencies
-- build 변경시 재로딩
+- build.gradle 변경시 재로딩 필요
 
 3) 웹 프로젝트 실행
-- preference > gradle 설정을 intellij로 변경
+- preference > gradle 설정을 intelliJ로 변경
 - Run으로 실행
 
 ## 비즈니스 요구사항과 설계
@@ -26,13 +26,20 @@
 주문과 할인 정책
 - 회원은 상품을 주문할 수 있다.
 - 회원등급에 따라 할인 정책을 적용할 수 있다.
-- 할인 정책은 모든 VIPsms 1000원을 할인해주는 고정 금액 할인을 적용해달라.(나중에 변경될 수 있다)
+- 할인 정책은 모든 VIP는 1000원을 할인해주는 고정 금액 할인을 적용해달라.(나중에 변경될 수 있다)
 - 할인 정책은 변경 가능성이 높다. 회사의 기본 할인 정책을 아직 정하지 못했고, 오픈 직전까지 고민을 미루고 싶다. 최악의 경우 할인을 적용하지 않을 수 있다.(미확정)
 ```
 
 ## 회원 도메인 설계
 - 객체 다이어그램 작성
 - UML 다이어그램 표기법
+
+(회원 도메인 요구사항)
+```
+- 회원가입을 하고 조회할 수 있다.
+- 회원은 일반과 VIP 두가지 등급이 있다.
+- 회원 데이터는 자체 DB를 구축할 수 있고, 외부 시스템과 연동할 수 있다.
+```
 
 (회원 도메인 협력 관계): 기획자도 함꼐 확인
 ```
@@ -59,6 +66,15 @@ MemberServiceImpl -> <interface>MemberRepository
 
 ## 회원 도메인 개발
 - 회원 엔티티
+1) src > main > java > hello.core.member(package) 생성
+2) src > main > java > hello.core.member에 Grade(Enum) 생성
+3) src > main > java > hello.core.member에 Member(Class) 생성
++) cmd + Enter로 생성자 선택
+4) src > main > java > hello.core.member에 MemberRepository(Interface) 생성
+5) src > main > java > hello.core.member에 MemoryMemberRepository(Class) 생성
++) opt + enter로 인터페이스 구현
+6) src > main > java > hello.core.member에 MemberService(Interface) 생성
+6) src > main > java > hello.core.member에 MemberServiceImpl(Class) 생성
 
 
 ## 회원 도메인 실행과 테스트
@@ -75,6 +91,15 @@ MemberServiceImpl -> <interface>MemberRepository
 
 ## 주문과 할인 도메인 설계
 - 역할과 구현을 분리해서 자유롭게 구현 객체를 조립할 수 있게 설계
+
+(주문과 할인 정책)
+```
+- 회원은 상품을 주문할 수 있다.
+- 회원등급에 따라 할인 정책을 적용할 수 있다.
+- 할인 정책은 모든 VIP는 1000원을 할인해주는 고정 금액 할인을 적용해달라.(나중에 변경될 수 있다)
+- 할인 정책은 변경 가능성이 높다. 회사의 기본 할인 정책을 아직 정하지 못했고, 오픈 직전까지 고민을 미루고 싶다. 최악의 경우 할인을 적용하지 않을 수 있다.(미확정)
+```
+
 
 (주문 도메인 협력, 역할, 책임)
 ```
@@ -118,17 +143,19 @@ MemberServiceImpl -> <interface>MemberRepository
 ```
 
 ## 주문과 할인 도메인 개발
-1) hello.core.dicount(package) 생성
-2) hello.core.dicount에 DiscountPolicy(interface) 생성
-3) hello.core.dicount에 FixDicountPolicy(class) 생성
+(할인)
+1) src > main > java > hello.core.dicount(package) 생성
+2) src > main > java > hello.core.dicount에 DiscountPolicy(interface) 생성
+3) src > main > java > hello.core.dicount에 FixDicountPolicy(class) 생성
 
-1) hello.core.order(package) 생성
-2) hello.core.order에 Order(class) 생성
-3) hello.core.order에 OrderService(interface) 생성
-4) hello.core.order에 OrderServiceImpl(class) 생성
+(주문)
+1) src > main > java > hello.core.order(package) 생성
+2) src > main > java > hello.core.order에 Order(class) 생성
+3) src > main > java > hello.core.order에 OrderService(interface) 생성
+4) src > main > java > hello.core.order에 OrderServiceImpl(class) 생성
 
 
 ## 주문과 할인 도메인 실행과 테스트
-1) hello.core에 OrderApp(class) 생성
+1) src > main > java > hello.core에 OrderApp(class) 생성
 2) test > java > hello.core.order(package) 생성
 3) test > java > hello.core.order에 OrderServiceTest(class) 생성
