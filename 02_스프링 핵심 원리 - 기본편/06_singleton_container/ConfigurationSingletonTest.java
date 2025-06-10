@@ -4,6 +4,22 @@ public class ConfigurationSingletonTest {
 
     @Test
     void configurationTest() {
+
+        // @Bean memberService -> new MemoryMemberRepository()
+        // @Bean orderService -> new MemoryMemberRepository()
+
+        // 예상
+        // call AppConfig.memberService
+        // call AppConfig.memberRepository
+        // call AppConfig.memberRepository
+        // call AppConfig.orderService
+        // call AppConfig.memberReposiroty
+
+        // 실제
+        // call AppConfig.memberService
+        // call AppConfig.memberRepository
+        // call AppConfig.orderService
+
         ApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
 
         MemberServiceImpl memberService = ac.getBean("memberService", MemberServiceImpl.class);
@@ -24,6 +40,7 @@ public class ConfigurationSingletonTest {
 
     @Test
     void configurationDeep() {
+        // AppConfig.class를 넘기면 스프링 빈으로 등록됨
         ApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
         AppConfig bean = ac.getBean(AppConfig.class);
 
