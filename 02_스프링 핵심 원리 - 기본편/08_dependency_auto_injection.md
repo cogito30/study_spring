@@ -267,9 +267,27 @@ public DiscountPolicy setDiscountPolicy(DiscountPolicy discountPolicy) {
 (우선순위)
 - @Primary는 기본값처럼 동작하는 것이고, @Qualifier는 매우 상세하게 동작한다. 이런 경우 어떤 것이 우선권을 가져갈까? 스프링은 자동보다는 수동이, 넓은 범위의 선택권보다는 좁은 범위의 선택권 우선순위가 높다. 따라서 여기서도 @Qualifier가 우선권이 높다
 
-## 애노체이션 직접 만들기
+## 애노테이션 직접 만들기
+- @Qualifier("mainDiscountPolicy")는 컴파일시 타입 체크가 안됨
+
+1) src > main > java > hello.core.annotation(package) 생성
+2) src > main > java > hello.core.annotation에 MainDiscountPolicy(annotation) 생성
+```java
+@MainDiscoutnPolicy
+public class RateDiscountPolicy implements DiscountPolicy {}
+
+// 가져다 사용하는 곳
+@Autowired
+public OrderServiceImpl(MemberRepository memberRepository, @MainDiscountPolicy DiscountPolicy discountPolicy) {}
+```
+
+- 애노테이션에는 상속이라는 개념이 없음. 이렇게 애노테이션ㅇ르 모아서 사용하는 기능은 스프링이 지원해주는 기능
+- @Qualifier 뿐만이 아니라 다른 애노테이션들도 함께 조합해서 사용할 수 있음. 단적으로 @Autowired도 재정의할 수 있음. 몰론 스프링이 제공하는 기능을 뚜렷한 목적 없이 무분별하게 재정의 하는 것은 유지보수에 더 혼란만 가중
+
 
 ## 조회한 빈이 모두 필요할 때, List, Map
+
+
 
 ## 자동, 수동의 올바른 실무 운영 기준
   
