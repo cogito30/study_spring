@@ -158,9 +158,51 @@ public int logic() {
 - 프로토타입 빈은 언제 사용할까? 매번 사용할 때마다 의존관계 주입이 완료된 새로운 객체가 필요하면 사용하면 됨. 그런데 실무에서 웹 애플리케이션을 개발해보면 싱글톤 빈으로 대부분의 문제를 해결할 수 있기 때문에 프로토타입 빈을 직접적으로 사용하는 일이 드물다
 - ObjectProvider, JSR303 Provider 등은 프로토타입 뿐만 아니라 DL이 필요한 경우는 언제든지 사용할 수 있음
 
++) 스프링이 제공하는 메서드에 @Lookup 애노테이션을 사용하는 방법도 있지만, 이전 방법들로 충분하고 고려해야할 내용도 많아서 생략
+
++) 실무에서 자바 표준인 JSR-330 Provider를 사용할 것인지, 아니면 스프링이 제공하는 ObjectProvider를 사용할지 고민이 될 것이다. ObjectProvider는 DL을 위한 편의 기능을 많이 제공해주고 스프링 외에 별도의 의존관계 추가가 필요없기 떄문에 편리하다. 만약 코드를 스프링이 아닌 다른 컨테이너에서도 사용할 수 있어야 한다면 
+JSR-330 Provider를 사용해야한다
+
++) 스프링을 사용하다보면 이 기능 뿐만 아니라 다른 기능들도 자바 표준과 스프링이 제공하는 기능이 겹칠때가 많이 있다. 대부분 스프링이 더 다양하고 편리한 기능을 제공해주기 때문에, 특별히 다른 컨테이너를 사용할 일이 없다면 스프링이 제공하는 기능을 사용하면 됨
+
++) JPA는 자바 표준이 승리했기에 Hibernate는 JPA 표준 구현체 내로 들어감.
++) Spring의 경우 사실상 기술 표준이 되어 Spring 컨테이너 기능을 사용. 기능이 비슷할 경우 Spring 사용. 기능상 java 표준을 추천한다면 java 표준을 사용
+
 ## 웹 스코프
+- 싱글톤: 스프링 컨테이너의 시작과 끝을 함께하는 매우 긴 스코프
+- 프로토타입: 생성과 의존관계 중비, 초기화까지만 진행하는 특별한 스코프
+
+(웹 스코프의 특징)
+- 웹 스코프는 웹 환경에서만 동작
+- 웹 스코프는 프로토타입과 다르게 스프링이 해당 스코프의 종료시점까지 관리. 종료 메서드가 호출됨
+
+(웹 스코프 종류)
+- request: HTTP 요청 하나가 들어오고 나갈 때까지 유지되는 스코프. 각각의 HTTP 요청마다 별도의 빈 인스턴스가 생성되고 관리됨
+- session: HTTP Session과 동일한 생명주기를 가지는 스코프
+- application: 서블릿 컨텍스트(ServletContext)와 동일한 생명주기를 가지는 스코프
+- websocket: 웹 소켓과 동일한 생명주기를 가지는 스코프
 
 ## requese 스코프 예제 만들기
+- 웹 스코프는 웹 환경에서만 동작하므로 web 환경이 동작하도록 라이브러리 추가
+
+1) build.gradle에 추가
+```java
+implementation 'org.springframework.boo:spring-boot-starter-web'
+```
+2) src > main > java > hello.core의 CoreApplication 실행
+- `spring-boot-starter-web`라이브러리를 추가하면 스프링 부트는 내장 톰켓 서버를 활용해서 웹 서버와 스프링을 함께 실행시킴
+- 스프링 부트는 웹 라이브러리가 없으면 우리가 지금까지 학습한 AnnotationConfigApplicationContextㅇ르 기반으로 기본 애플리케이션을 구동. 웹 라이브러리가 추가되면 웹 관련 추가 설정과 환경들이 필요하므로 AnnotationConfigServletWebServerApplicationContext를 기반으로 애플리케이션을 구동
++) 기본 포트인 8080 포트를 다른 곳에서 사용중이여서 오루가 발생한다면 application.properties 파일에 server.port=9090 설정 추가
+
+(request scope 예제 개발)
+- 동시에 여러 HTTP 요청이 오면 정확히 어떤 요청이 남긴 로그인지 구분이 어려움
+- 이럴 때 사용하기 좋은 것이 request 스코프
+- request scope를 활용해서 로그가 남도록 추가 기능을 개발
+  - 기대하는 공통 포맷: `[UUID][requestURL]{message}`
+  - UUID를 사용해서 HTTP 요청을 구분하자
+  - requestURL 정보도 추가로 넣어서 어떤 URL을 요청해서 남은 로그인지 확인하자
+
+(코드 확인)
 
 ## 스코프와 Provider
 
