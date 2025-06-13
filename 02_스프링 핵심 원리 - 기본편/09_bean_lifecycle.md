@@ -73,3 +73,12 @@
 2) src > test > javav > hello.core.lifecycle에 BeanLifeCycleTEst(class) 코드 수정. @Bean에 파라미터 제거
 
 (@PostConstruct, @PreDestroy 애노테이션 특징)
+- 최신 스프링에서 가장 권장하는 방법
+- 애노테이션 하나만 붙이면 되므로 편리
+- 패키지를 잘 보면 javax.annotation.PostConstruct이다. 스프링에서 종속적인 기술이 아니라 JSR-250라는 자바 표준이다. 따라서 스프링이 아닌 다른 컨테이너에서 동작한다
+- 컴포넌트 스캔과 잘 어울림
+- 유일한 단점은 외부라이브러리에는 적용하지 못한. 외부라이브러리를 초기화, 종료해야하면 @Bean의 기능을 사용 
+
+(정리)
+- @PostConstruct, @PreDestroy 애노테이션을 사용하자
+- 코드를 고칠 수 없는 외부라이브러리를 초기화, 종료해아 하면 @Bean의 initMethod, destroyMethod를 사용하자
