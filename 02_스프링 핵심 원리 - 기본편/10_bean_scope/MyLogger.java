@@ -4,7 +4,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
-@Scope(value = "requeset")
+// @Scope(value = "requeset")
+@Scope(value = "requeset", proxyMode = ScopedProxyMode.TARGET_CLASS)
 pubic class MyLogger {
 
     private String uuid ;
