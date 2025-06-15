@@ -203,7 +203,41 @@ implementation 'org.springframework.boo:spring-boot-starter-web'
   - requestURL 정보도 추가로 넣어서 어떤 URL을 요청해서 남은 로그인지 확인하자
 
 (코드 확인)
+1) src > main > java > hello.core.common(package) 생성
+2) src > main > java > hello.core.common에 MyLogger(class) 생성
+- 로그를 출력하기 위한 MyLogger 클래스이다
+- @Scope(value = "reqeust")를 사용해서 request 스코프로 지정했다. 이게 이 빈은 HTTP 요청 당 하나씩 생성되고, HTTP 요청이 끝나는 시점에 소멸된다
+- 이 빈이 생성되는 시점에 자동으로 @PostConstruct 초기화 메서드를 사용해서 uuid를 생성해서 저장해 둔다. 이 빈은 HTTP 요청 당 하나씩 생성되므로 uuid를 저장해두면 다른 HTTP 요청과 구분할 수 있다.
+- 이 빈이 소멸되는 시점에 @PreDestroy를 사용해서 종료메시지를 남긴다
+- requestURL은 이 빈이 생성되는 시점에는 알 수 없으므로 외부에서 setter로 입력 받는다.
+
+3) src > main > java > hello.core.web(package) 생성
+4) src > main > java > hello.core.web에 LogDemoController(class) 생성
+- 로거가 잘 작동하는지 확인하는 테스트용 컨트롤러다
+- 여기서 HttpServiceRequest를 통해서 요청 URL을 받았다
+  - reqeustURL값: http://localhost:8080/log-demo
+- 이렇게 받은 requestURL 값을 myLogger에 저장해둔다. myLogger는 HTTP 요청 당 각각 구분되므로 다른 HTTP 요청 때문에 값이 섞이는 걱정은 하지 않아도 된다
+- 컨트롤러에서 controller test라는 로그를 남긴다
+
++) requestURL을 MyLogger에 저장하는 부분은 컨트롤러보다는 공통처리가 가능한 스프링 인터셉터나 서블릿 필터 같은 곳을 활용하는 것이 좋다. 여기서는 예제를 단순화하고, 아직 스프링 인터셉트를 학습하지 않은 분들을 위해서 컨트롤러를 사용함. 스프링 웹에 익숙하다면 인터셉터를 사용해서 구현
+
+4) src > main > java > hello.core.web에 LogDemoService(class) 생성
+- 비즈니스 로직이 있는 서비스 계층에서도 로그를 출력
+- request scope를 사용하지 않고 파라미터로 이 모든 정보를 서비스 계층에 넘긴다면, 파라미터가 많아서 지저분해진다. 더 문제는 requestURL 같은 웹과 관련된 정보가 웹과 관련없는 서비스 계층까지 넘어가게된다. 웹과 관련된 부분은 컨트롤러까지만 사용해야 함. 서비스 계층은 웹 기술에 종속되지 않고 가급적 순수하게 유지하는 것이 유지보수 관점에서 좋음
+- reqeust scope의 MyLogger 덕분에 이런 부분을 파라미터로 넘기지 않고 MyLogger의 멤버 변수에 저장해서 코드와 계층을 깔끔하게 유지 할 수 있음
+
+- 실행시 기대와 다른 오류 발생
+- 스프링 애플리케이션ㅇ르 실행 시키면 오류가 발생함. 메시지 마지막에 싱글톤이라는 단어가 나오고 스프링 애플리케이션을 실행하는 시점에 싱글톤 빈은 생성해서 주입이 가능하지만 request 스코프 빈은 아직 생성되지 않는다. 이 빈은 실제 고객의 요청이 와야 생성할 수 있다.
 
 ## 스코프와 Provider
+- Provider를 사용해여 스코프 문제 해결
+1) src > main > java > hello.core.web의 LogDemoController(class) 코드 수정
+2) src > main > java > hello.core.web의 LogDemoServer(class) 코드 수정
+- 동시에 여러 요청이 와도 객체마다 따로 처리
+- main() 메서드로 스프링을 실행하고, 웹 브라우저에 http://localhost:8080/log-demo를 입력하여 작동 확인
+
+- ObjectProvider 덕분에 ObjectProvider.getObject()를 호출하는 시점까지 request scope 빈의 싱성을 지연할 수 있음
+- ObjectProvider.getObject()를 호출하시는 시점에는 HTTP 요청이 진행중이므로 request scope 빈의 생성이 정상 처리
+- ObjectProvider.getObject()를 LogDemoController, LogDemoService에서 각각 한번씩 따로 호출해다 같은 HTTP 요청이면 같은 스프링 빈이 반환됨
 
 ## 스코프와 프록시
